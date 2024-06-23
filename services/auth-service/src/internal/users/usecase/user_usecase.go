@@ -21,6 +21,10 @@ func (usecase *UserUsecase ) GetUser(id string) (*models.User, error) {
 	return usecase.repo.GetUser(id)
 }
 
+func (usecase *UserUsecase ) GetUserByEmail(email string) (*models.User, error) {
+	return usecase.repo.GetUserByEmail(email)
+}
+
 func (usecase *UserUsecase ) CreateUser(user *models.User) error {
 	return usecase.repo.CreateUser(user)
 }
