@@ -15,7 +15,7 @@ func NewUserUsecase() IUserUsecase {
 	return &UserUsecase{}
 }
 
-func (usecase *UserUsecase ) GetUser(id string) (*models.UserResponse, error) {
+func (usecase *UserUsecase ) GetUser(id string) (*models.User, error) {
 	return usecase.repo.GetUser(id)
 }
 

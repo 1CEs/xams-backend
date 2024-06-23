@@ -19,17 +19,17 @@ func setupTestDB() *gorm.DB {
 func TestRepositoryFunctions(t *testing.T) {
     testCases := []struct {
         testName string
-        setupFunc func() (*gorm.DB, *UserRepository)
-        action func(repo *UserRepository, mockUser *models.User) error
+        setupFunc func() (*gorm.DB, IUserRepository)
+        action func(repo IUserRepository, mockUser *models.User) error
         assertFunc func(t *testing.T, db *gorm.DB, mockUser *models.User)
     }{
         {
             testName: "CreateUser",
-            setupFunc: func() (*gorm.DB, *UserRepository) {
+            setupFunc: func() (*gorm.DB, IUserRepository) {
                 db := setupTestDB()
                 return db, NewUserRepository(db)
             },
-            action: func(repo *UserRepository, mockUser *models.User) error {
+            action: func(repo IUserRepository, mockUser *models.User) error {
                 return repo.CreateUser(mockUser)
             },
             assertFunc: func(t *testing.T, db *gorm.DB, mockUser *models.User) {
@@ -45,12 +45,12 @@ func TestRepositoryFunctions(t *testing.T) {
         },
         {
             testName: "GetUser",
-            setupFunc: func() (*gorm.DB, *UserRepository) {
+            setupFunc: func() (*gorm.DB, IUserRepository) {
                 db := setupTestDB()
                 repo := NewUserRepository(db)
                 return db, repo
             },
-            action: func(repo *UserRepository, mockUser *models.User) error {
+            action: func(repo IUserRepository, mockUser *models.User) error {
                 _, err := repo.GetUser("39035909950590")
                 return err
             },

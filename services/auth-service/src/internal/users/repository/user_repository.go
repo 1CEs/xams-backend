@@ -11,28 +11,18 @@ type (
 	}
 )
 
-func NewUserRepository(db *gorm.DB) *UserRepository {
+func NewUserRepository(db *gorm.DB) IUserRepository {
 	return &UserRepository{db: db}
 }
 
-func (repo *UserRepository) GetUser(id string) (*models.UserResponse, error) {
+func (repo *UserRepository) GetUser(id string) (*models.User, error) {
 	var user models.User
 
 	if err := repo.db.First(&user, "user_id = ?", id).Error; err != nil {
 		return nil, err
 	}
 
-	userResponse := models.UserResponse{
-		UserID: user.UserID,
-		Email: user.Email,
-		Prename: user.Prename,
-		FirstName: user.FirstName,
-		LastName: user.LastName,
-		BranchID: user.BranchID,
-		Role: user.Role,
-	}
-
-	return &userResponse, nil
+	return &user, nil
 }
 
 func (repo *UserRepository) CreateUser(user *models.User) error {
