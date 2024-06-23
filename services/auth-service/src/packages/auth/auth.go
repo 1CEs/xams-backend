@@ -24,7 +24,7 @@ type Authentication struct {
 	jwtSecret   []byte
 }
 
-func NewAuthentication(uc usecase.IUserUsecase) *Authentication {	
+func NewAuthentication(uc usecase.IUserUsecase) IAuthentication {	
 	//jwtSecret := os.Getenv(JWT_SECRET_ENV)
 	jwtSecret := JWT_SECRET_ENV
 	if jwtSecret == "" {
@@ -62,8 +62,8 @@ func (auth *Authentication) generateJWT(user *models.User) (string, error) {
 	return ss, nil
 }
 
-func (auth *Authentication) Login(id string, password string) (*models.UserResponse, error) {
-	user, err := auth.userUsecase.GetUser(id)
+func (auth *Authentication) Login(email string, password string) (*models.UserResponse, error) {
+	user, err := auth.userUsecase.GetUserByEmail(email)
 	if err != nil {
 		log.Printf("Error fetching user: %v", err)
 		return nil, errors.New("invalid username or password")

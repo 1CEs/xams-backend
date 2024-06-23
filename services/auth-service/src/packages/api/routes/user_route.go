@@ -6,5 +6,5 @@ import (
 )
 
 func UserRoute(db *gorm.DB, router *gin.RouterGroup) {
-
+	
 }

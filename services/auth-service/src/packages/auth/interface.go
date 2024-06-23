@@ -6,7 +6,7 @@ import (
 
 type (
 	IAuthentication interface {
-		Login(id string, password string) (*models.UserResponse, error)
+		Login(email string, password string) (*models.UserResponse, error)
 		Register(user *models.User) (*models.UserResponse, error)
 		generateJWT(user *models.User) (string, error)
 	}
