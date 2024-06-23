@@ -5,6 +5,6 @@ import (
 	"gorm.io/gorm"
 )
 
-func UserRoute(db *gorm.DB, router *gin.RouterGroup) {
+func RegisterRoute(db *gorm.DB, router *gin.RouterGroup) {
 
 }
