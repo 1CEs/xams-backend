@@ -20,4 +20,9 @@ type (
 		jwt.RegisteredClaims
 	}
 
+	LoginRequest struct {
+		Email     string `json:"email"`
+		Password  string `json:"password"`
+	}
+
 )
