@@ -7,12 +7,14 @@ import (
 
 type (
 	UserUsecase struct {
-		repo repository.UserRepository
+		repo repository.IUserRepository
 	}
 )
 
-func NewUserUsecase() IUserUsecase {
-	return &UserUsecase{}
+func NewUserUsecase(repo repository.IUserRepository) IUserUsecase {
+	return &UserUsecase{
+		repo: repo,
+	}
 }
 
 func (usecase *UserUsecase ) GetUser(id string) (*models.User, error) {
@@ -25,4 +27,8 @@ func (usecase *UserUsecase ) CreateUser(user *models.User) error {
 
 func (usecase *UserUsecase ) UpdateUser(user *models.User) error {
 	return usecase.repo.UpdateUser(user)
+}
+
+func (usecase *UserUsecase ) IsUserAlreadyExists(id string) error {
+	return usecase.repo.IsUserAlreadyExists(id)
 }

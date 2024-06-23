@@ -7,5 +7,6 @@ type (
 		GetUser(id string) (*models.User, error)
 		UpdateUser(user *models.User) error
 		CreateUser(user *models.User) error
+		IsUserAlreadyExists(id string) error
 	}
 )

@@ -1,10 +1,10 @@
-package repository
+package test
 
 import (
 	"testing"
-
 	"github.com/stretchr/testify/assert"
 	"github.com/xams-backend/services/auth-service/src/internal/models"
+    "github.com/xams-backend/services/auth-service/src/internal/users/repository"
 	"github.com/xams-backend/services/auth-service/src/packages/utils/mock"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -19,17 +19,17 @@ func setupTestDB() *gorm.DB {
 func TestRepositoryFunctions(t *testing.T) {
     testCases := []struct {
         testName string
-        setupFunc func() (*gorm.DB, IUserRepository)
-        action func(repo IUserRepository, mockUser *models.User) error
+        setupFunc func() (*gorm.DB, repository.IUserRepository)
+        action func(repo repository.IUserRepository, mockUser *models.User) error
         assertFunc func(t *testing.T, db *gorm.DB, mockUser *models.User)
     }{
         {
             testName: "CreateUser",
-            setupFunc: func() (*gorm.DB, IUserRepository) {
+            setupFunc: func() (*gorm.DB, repository.IUserRepository) {
                 db := setupTestDB()
-                return db, NewUserRepository(db)
+                return db, repository.NewUserRepository(db)
             },
-            action: func(repo IUserRepository, mockUser *models.User) error {
+            action: func(repo repository.IUserRepository, mockUser *models.User) error {
                 return repo.CreateUser(mockUser)
             },
             assertFunc: func(t *testing.T, db *gorm.DB, mockUser *models.User) {
@@ -45,12 +45,12 @@ func TestRepositoryFunctions(t *testing.T) {
         },
         {
             testName: "GetUser",
-            setupFunc: func() (*gorm.DB, IUserRepository) {
+            setupFunc: func() (*gorm.DB, repository.IUserRepository) {
                 db := setupTestDB()
-                repo := NewUserRepository(db)
+                repo := repository.NewUserRepository(db)
                 return db, repo
             },
-            action: func(repo IUserRepository, mockUser *models.User) error {
+            action: func(repo repository.IUserRepository, mockUser *models.User) error {
                 _, err := repo.GetUser("39035909950590")
                 return err
             },

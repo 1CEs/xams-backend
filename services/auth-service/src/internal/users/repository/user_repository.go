@@ -41,3 +41,11 @@ func (repo *UserRepository) UpdateUser(user *models.User) error {
 
 	return nil
 }
+
+func (repo *UserRepository) IsUserAlreadyExists(id string) error {
+	if err := repo.db.Model(&models.User{}).Where("user_id = ?", id).Error; err != nil {
+		return err
+	}
+
+	return nil
+}
