@@ -20,5 +20,5 @@ func LoginRoute(db *gorm.DB, router *gin.RouterGroup) {
 	}
 
 	login_path := os.Getenv("LOGIN_ROUTE_PATH")
-	router.GET(login_path, loginController.Login)
+	router.POST(login_path, loginController.Login)
 }
