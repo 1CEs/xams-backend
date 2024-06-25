@@ -50,7 +50,7 @@ func (auth *Authentication) generateJWT(user *models.User) (string, error) {
 		},
 	}
 
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	token := jwt.NewWithClaims(jwt.SigningMethodHS512, claims)
 
 	ss, err := token.SignedString(auth.jwtSecret)
 	if err != nil {

@@ -45,7 +45,7 @@ func Test_Login(t *testing.T) {
 	userUsecase := usecase.NewUserUsecase(userRepository)
 	authen := auth.NewAuthentication(userUsecase)
 
-	user, err := authen.Login("12345678-9", "helloja")
+	user, err := authen.Login("ice@gmail.com", "helloja")
 	userJson, _ := json.MarshalIndent(user, "", "		")
 	log.Println(string(userJson))
 	log.Println(err)

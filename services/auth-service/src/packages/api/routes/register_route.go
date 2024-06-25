@@ -20,5 +20,5 @@ func RegisterRoute(db *gorm.DB, router *gin.RouterGroup) {
 	}
 
 	register_path := os.Getenv("REGISTER_ROUTE_PATH")
-	router.GET(register_path, registerController.Register)
+	router.POST(register_path, registerController.Register)
 }
