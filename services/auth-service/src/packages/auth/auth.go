@@ -3,7 +3,7 @@ package auth
 import (
 	"errors"
 	"log"
-	//"os"
+	"os"
 	"time"
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/google/uuid"
@@ -15,8 +15,8 @@ import (
 
 const (
 	JWT_SECRET_ENV = "JWT_SECRET"
-	JWT_EXPIRATION   = 24 * time.Hour
-	SALTY     = 14
+	JWT_EXPIRATION = 24 * time.Hour
+	SALTY = 14
 )
 
 type Authentication struct {
@@ -25,8 +25,7 @@ type Authentication struct {
 }
 
 func NewAuthentication(uc usecase.IUserUsecase) IAuthentication {	
-	//jwtSecret := os.Getenv(JWT_SECRET_ENV)
-	jwtSecret := JWT_SECRET_ENV
+	jwtSecret := os.Getenv(JWT_SECRET_ENV)
 	if jwtSecret == "" {
 		log.Fatal("JWT_SECRET environment variable not set")
 	}
@@ -39,7 +38,7 @@ func NewAuthentication(uc usecase.IUserUsecase) IAuthentication {
 func (auth *Authentication) generateJWT(user *models.User) (string, error) {
 	claims := &models.UserClaims{
 		UserID: user.UserID,
-		Email:  user.Email,
+		Role: user.Role,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(JWT_EXPIRATION)),
 			IssuedAt:  jwt.NewNumericDate(time.Now()),

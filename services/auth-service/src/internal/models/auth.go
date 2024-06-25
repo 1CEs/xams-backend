@@ -16,7 +16,7 @@ type (
 
 	UserClaims struct {
 		UserID    string 
-		Email     string
+		Role      Role
 		jwt.RegisteredClaims
 	}
 
