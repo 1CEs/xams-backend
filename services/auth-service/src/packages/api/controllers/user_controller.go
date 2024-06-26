@@ -13,7 +13,7 @@ type (
 )
 
 func (uc *UserController) GetUser(context *gin.Context) {
-	userId := context.Param("user_id")
+	userId := context.Param("id")
 	if userId == "" {
 		context.JSON(http.StatusBadRequest, gin.H{"message": "invalid parameter"})
 	}

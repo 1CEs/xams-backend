@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"os"
+
 	"github.com/gin-gonic/gin"
 	"github.com/xams-backend/services/auth-service/src/internal/models"
 	"github.com/xams-backend/services/auth-service/src/packages/auth"
@@ -20,7 +22,7 @@ func (lc *LoginController) Login(context *gin.Context) {
 	var request models.LoginRequest
 	if err := context.ShouldBind(&request); err != nil {
 		log.Println("bind error")
-		context.JSON(http.StatusInternalServerError, gin.H{"message": err})
+		context.JSON(http.StatusBadRequest, gin.H{"message": err})
 		return
 	}
 	
@@ -33,8 +35,10 @@ func (lc *LoginController) Login(context *gin.Context) {
 		return
 	}
 
+	cookieName := os.Getenv("COOKIE_JWT_TOKEN")
+
 	context.SetSameSite(http.SameSiteLaxMode)
-	context.SetCookie("token", token, 3600 * 24 * 30, "", "", false, true)
+	context.SetCookie(cookieName, token, 3600 * 24 * 30, "", "", false, true)
 
 	context.JSON(http.StatusOK, userResponse)
 }
