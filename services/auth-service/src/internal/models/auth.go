@@ -3,7 +3,7 @@ package models
 import "github.com/golang-jwt/jwt/v4"
 
 type (
-	UserResponse struct {
+	LogInResponse struct {
 		UserID    string `json:"user_id"`
 		Email     string `json:"email"`
 		Prename   string `json:"prename"`
@@ -11,7 +11,6 @@ type (
 		LastName  string `json:"last_name"`
 		BranchID  uint   `json:"branch_id"`
 		Role      Role   `json:"role"`
-		Token     string `json:"token"`
 	}
 
 	UserClaims struct {
