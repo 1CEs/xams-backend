@@ -24,7 +24,7 @@ func Test_Register(t *testing.T) {
 	userRepository := repository.NewUserRepository(db)
 	userUsecase := usecase.NewUserUsecase(userRepository)
 	authen := auth.NewAuthentication(userUsecase)
-	user, err := authen.Register(&models.User{
+	user, _, err := authen.Register(&models.User{
 		UserID: "1111111111-8",
 		Password: "helloja232",
 		Email: "ic21312e@gmail.com",
@@ -45,7 +45,7 @@ func Test_Login(t *testing.T) {
 	userUsecase := usecase.NewUserUsecase(userRepository)
 	authen := auth.NewAuthentication(userUsecase)
 
-	user, err := authen.Login("ice@gmail.com", "helloja")
+	user, _, err := authen.Login("ice@gmail.com", "helloja")
 	userJson, _ := json.MarshalIndent(user, "", "		")
 	log.Println(string(userJson))
 	log.Println(err)

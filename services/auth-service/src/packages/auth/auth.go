@@ -61,24 +61,24 @@ func (auth *Authentication) generateJWT(user *models.User) (string, error) {
 	return ss, nil
 }
 
-func (auth *Authentication) Login(email string, password string) (*models.UserResponse, error) {
+func (auth *Authentication) Login(email string, password string) (*models.LogInResponse, string, error) {
 	user, err := auth.userUsecase.GetUserByEmail(email)
 	if err != nil {
 		log.Printf("Error fetching user: %v", err)
-		return nil, errors.New("invalid username or password")
+		return nil, "", errors.New("invalid username or password")
 	}
 
 	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password)); err != nil {
 		log.Printf("Password mismatch: %v", err)
-		return nil, errors.New("invalid password")
+		return nil, "", errors.New("invalid password")
 	}
 
 	token, err := auth.generateJWT(user)
 	if err != nil {
-		return nil, err
+		return nil, "", err
 	}
 
-	userResponse := models.UserResponse{
+	userResponse := models.LogInResponse{
 		UserID:    user.UserID,
 		Email:     user.Email,
 		Prename:   user.Prename,
@@ -86,43 +86,42 @@ func (auth *Authentication) Login(email string, password string) (*models.UserRe
 		LastName:  user.LastName,
 		BranchID:  user.BranchID,
 		Role:      user.Role,
-		Token:     token,
 	}
 
 	log.Printf("User %s logged in successfully", user.UserID)
-	return &userResponse, nil
+	return &userResponse, token, nil
 }
 
-func (auth *Authentication) Register(user *models.User) (*models.UserResponse, error) {
+func (auth *Authentication) Register(user *models.User) (*models.LogInResponse ,string, error) {
 	if err := auth.userUsecase.IsUserAlreadyExists(user.UserID); errors.Is(err, gorm.ErrRecordNotFound) {
 		log.Printf("User with ID %s already exists", user.UserID)
-		return nil, errors.New("user already exists")
+		return nil, "", errors.New("user already exists")
 	}
 
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), SALTY)
 	if err != nil {
 		log.Printf("Error hashing password: %v", err)
-		return nil, errors.New("error hashing password")
+		return nil, "", errors.New("error hashing password")
 	}
 	user.Password = string(hashedPassword)
 
 	if err := auth.userUsecase.CreateUser(user); err != nil {
 		log.Printf("Cannot create user: %v", err)
-		return nil, errors.New("cannot create user")
+		return nil, "", errors.New("cannot create user")
 	}
 
 	createdUser, err := auth.userUsecase.GetUser(user.UserID)
 	if err != nil {
 		log.Printf("Cannot find created user: %v", err)
-		return nil, errors.New("cannot find created user")
+		return nil, "", errors.New("cannot find created user")
 	}
 
 	token, err := auth.generateJWT(createdUser)
 	if err != nil {
-		return nil, err
+		return nil, "", err
 	}
 
-	userResponse := models.UserResponse{
+	userResponse := models.LogInResponse{
 		UserID:    createdUser.UserID,
 		Email:     createdUser.Email,
 		Prename:   createdUser.Prename,
@@ -130,9 +129,8 @@ func (auth *Authentication) Register(user *models.User) (*models.UserResponse, e
 		LastName:  createdUser.LastName,
 		BranchID:  createdUser.BranchID,
 		Role:      createdUser.Role,
-		Token:     token,
 	}
 
 	log.Printf("User %s registered successfully", createdUser.UserID)
-	return &userResponse, nil
+	return &userResponse, token, nil
 }

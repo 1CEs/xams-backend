@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
-
 	"github.com/gin-gonic/gin"
 	"github.com/xams-backend/services/auth-service/src/internal/models"
 	"github.com/xams-backend/services/auth-service/src/packages/auth"
@@ -28,11 +27,14 @@ func (lc *LoginController) Login(context *gin.Context) {
 	userJson, _ := json.MarshalIndent(request, "", "		")
 	log.Println(string(userJson))
 
-	userResponse, err := lc.Auth.Login(request.Email, request.Password)
+	userResponse, token, err := lc.Auth.Login(request.Email, request.Password)
 	if err != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{"message": err})
 		return
 	}
+
+	context.SetSameSite(http.SameSiteLaxMode)
+	context.SetCookie("token", token, 3600 * 24 * 30, "", "", false, true)
 
 	context.JSON(http.StatusOK, userResponse)
 }

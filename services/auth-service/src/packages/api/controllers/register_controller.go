@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"net/http"
-
 	"github.com/gin-gonic/gin"
 	"github.com/xams-backend/services/auth-service/src/internal/models"
 	"github.com/xams-backend/services/auth-service/src/packages/auth"
@@ -20,11 +19,14 @@ func (rc *RegisterController) Register(context *gin.Context) {
 		context.JSON(http.StatusInternalServerError, gin.H{"message": err})
 		return
 	}
-	userResponse, err := rc.Auth.Register(&request)
+	userResponse, token, err := rc.Auth.Register(&request)
 	if err != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{"message": err})
 		return
 	}
+
+	context.SetSameSite(http.SameSiteLaxMode)
+	context.SetCookie("token", token, 3600 * 24 * 30, "", "", false, true)
 
 	context.JSON(http.StatusOK, userResponse)
 }
