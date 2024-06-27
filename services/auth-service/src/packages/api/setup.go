@@ -19,5 +19,5 @@ func SetupRoutes(db *gorm.DB, gin *gin.Engine) {
 	route = gin.Group("")
 	route.Use(middleware.IsAuthorized)
 	routes.UserRoute(db, route)
-
+	
 }
