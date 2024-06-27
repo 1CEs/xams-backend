@@ -16,11 +16,12 @@ func (uc *UserController) GetUser(context *gin.Context) {
 	userId := context.Param("id")
 	if userId == "" {
 		context.JSON(http.StatusBadRequest, gin.H{"message": "invalid parameter"})
+		return
 	}
 
 	userResponse, err := uc.Usecase.GetUser(userId)
 	if err != nil {
-		context.JSON(http.StatusInternalServerError, gin.H{"message": err})
+		context.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 		return
 	}
 

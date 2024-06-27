@@ -22,7 +22,7 @@ func (lc *LoginController) Login(context *gin.Context) {
 	var request models.LoginRequest
 	if err := context.ShouldBind(&request); err != nil {
 		log.Println("bind error")
-		context.JSON(http.StatusBadRequest, gin.H{"message": err})
+		context.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
 	}
 	
@@ -31,7 +31,7 @@ func (lc *LoginController) Login(context *gin.Context) {
 
 	userResponse, token, err := lc.Auth.Login(request.Email, request.Password)
 	if err != nil {
-		context.JSON(http.StatusInternalServerError, gin.H{"message": err})
+		context.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 		return
 	}
 

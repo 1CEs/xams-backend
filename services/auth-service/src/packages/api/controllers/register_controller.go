@@ -18,12 +18,12 @@ type (
 func (rc *RegisterController) Register(context *gin.Context) {
 	var request models.User
 	if err := context.ShouldBind(&request); err != nil {
-		context.JSON(http.StatusBadRequest, gin.H{"message": err})
+		context.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
 	}
 	userResponse, token, err := rc.Auth.Register(&request)
 	if err != nil {
-		context.JSON(http.StatusInternalServerError, gin.H{"message": err})
+		context.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 		return
 	}
 
