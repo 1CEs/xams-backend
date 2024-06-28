@@ -8,16 +8,16 @@ import (
 )
 
 func SetupRoutes(db *gorm.DB, gin *gin.Engine) {
-	// For authentication route
-	route := gin.Group("/auth")
-	routes.LoginRoute(db, route)
-	routes.RegisterRoute(db, route)
-
-	// For user route
 	middleware := middleware.Middleware{}
 
-	route = gin.Group("")
-	route.Use(middleware.IsAuthorized)
-	routes.UserRoute(db, route)
+	// For authentication route
+	auth_route := gin.Group("/auth")
+	routes.LoginRoute(db, auth_route)
+	routes.RegisterRoute(db, auth_route)
+
+	// For user route
+	user_route := gin.Group("")
+	user_route.Use(middleware.IsAuthorized)
+	routes.UserRoute(db, user_route)
 	
 }

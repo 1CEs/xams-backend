@@ -18,4 +18,5 @@ func UserRoute(db *gorm.DB, router *gin.RouterGroup) {
 
 	user_path := os.Getenv("USER_ROUTE_PATH")
 	router.GET(user_path + "/:id", userController.GetUser)
+	router.GET(user_path + "/:id", userController.UpdateUser)
 }

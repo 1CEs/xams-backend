@@ -4,7 +4,6 @@ import (
 	"log"
 	"net/http"
 	"os"
-
 	"github.com/gin-gonic/gin"
 	"github.com/xams-backend/services/auth-service/src/internal/users/repository"
 	"github.com/xams-backend/services/auth-service/src/internal/users/usecase"
