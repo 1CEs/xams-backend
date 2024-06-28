@@ -18,7 +18,7 @@ func NewUserRepository(db *gorm.DB) IUserRepository {
 func (repo *UserRepository) GetUser(id string) (*models.User, error) {
 	var user models.User
 
-	if err := repo.db.First(&user, "user_id = ?", id).Error; err != nil {
+	if err := repo.db.Preload("Branch.Faculty").First(&user, "user_id = ?", id).Error; err != nil {
 		return nil, err
 	}
 
